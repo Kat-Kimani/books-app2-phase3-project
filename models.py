@@ -8,8 +8,12 @@ sys.path.append(os.getcwd)
 from sqlalchemy import create_engine, ForeignKey, Column, Integer, String, MetaData
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
 
 engine = create_engine("sqlite:///books2.db", echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
 Base = declarative_base()
 
 
@@ -26,6 +30,9 @@ class Book(Base):
     genre = relationship("Genre", back_populates="books")
     reviews = relationship("Review", back_populates="book")  # Added relationship
 
+    def get_reviews(self):
+        return self.reviews
+
     def __repr__(self):
         return f"Book(id={self.id}, title='{self.title}')"
 
@@ -38,7 +45,15 @@ class Author(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(15), nullable=False)
 
+    @staticmethod
+    def get_authors_list():
+        authors = session.query(Author).all()
+        return authors
+
     books = relationship("Book", back_populates="author")
+
+    def __repr__(self):
+        return f"Author(id={self.id}, name='{self.name}')"
 
     #########################################################
 

@@ -20,27 +20,33 @@ if __name__ == "__main__":
     fake = Faker()
 
     def create_fake_authors(num_authors):
+        authors = []
         for _ in range(num_authors):
             name = fake.name()
             author = Author(name=name)
             session.add(author)
+            authors.append(author)
+        return authors
 
-    def create_fake_books(num_books):
+    def create_fake_books(num_books, genres):
         for _ in range(num_books):
             title = fake.sentence(nb_words=3)
             description = fake.paragraph()
-            author = create_fake_authors(1)
-            genre = create_fake_genres(1)
+            author = random.choice(session.query(Author).all())
+            genre = random.choice(genres)
             book = Book(
                 title=title, description=description, author=author, genre=genre
             )
             session.add(book)
 
     def create_fake_genres(num_genres):
+        genres = []
         for _ in range(num_genres):
             name = fake.word()
             genre = Genre(name=name)
             session.add(genre)
+            genres.append(genre)
+        return genres
 
     def create_fake_borrowers(num_borrowers):
         for _ in range(num_borrowers):
@@ -64,10 +70,10 @@ if __name__ == "__main__":
             session.add(review)
 
     # Generate the fake data
-
+    genres = create_fake_genres(5)
     create_fake_authors(7)
-    create_fake_books(25)
-    create_fake_genres(5)
+    create_fake_books(25, genres)
+
     create_fake_borrowers(10)
     create_fake_reviews(40)
 
