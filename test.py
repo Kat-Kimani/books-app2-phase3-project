@@ -103,3 +103,24 @@ get_borrowers_for_book(book_id)
 # print(authors_list)
 
 #######################################
+
+# Get a book and its author as a tuple
+book = session.query(Book).first()
+book_tuple = (book.title, book.author.name)
+
+# Print the book tuple
+print("Book Tuple:")
+print(book_tuple)
+
+#####################################
+
+
+# Get authors as a dictionary
+authors_dict = {}
+authors = session.query(Author).all()
+for author in authors:
+    authors_dict[author.id] = author.name
+
+    # Print the authors dictionary
+print("Authors Dictionary:")
+print(authors_dict)
