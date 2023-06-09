@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     create_fake_authors(7)
     create_fake_books(25)
-    create_fake_genres(4)
+    create_fake_genres(5)
     create_fake_borrowers(10)
     create_fake_reviews(40)
 
